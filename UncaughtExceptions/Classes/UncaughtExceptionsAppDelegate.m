@@ -32,9 +32,9 @@
 
 - (void)badAccess
 {
-   void (*nullFunction)() = NULL;
-   
-   nullFunction();
+    UIView *v = [UIView new];
+    [v release];
+    v.backgroundColor = [UIColor blueColor];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
@@ -43,8 +43,12 @@
     [window makeKeyAndVisible];
     
     [self performSelector:@selector(installUncaughtExceptionHandler) withObject:nil afterDelay:0];
+    
+    //触发一次 NSException
 	[self performSelector:@selector(string) withObject:nil afterDelay:4.0];
-//    [self performSelector:@selector(badAccess) withObject:nil afterDelay:10.0];
+    
+    //触发一次 BSD 信号
+    [self performSelector:@selector(badAccess) withObject:nil afterDelay:10.0];
 
 	return YES;
 }
